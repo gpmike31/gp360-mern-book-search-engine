@@ -12,11 +12,13 @@ module.exports = {
 
     // ["Bearer", "<tokenvalue>"]
     if (req.headers.authorization) {
-      token = token.split(' ').pop().trim();
+      token = token.split(' ')
+      .pop()
+      .trim();
     }
 
     if (!token) {
-      return res.status(400).json({ message: 'You have no token!' });
+      return req;
     }
 
     // verify token and get user data out of it
@@ -25,11 +27,9 @@ module.exports = {
       req.user = data;
     } catch {
       console.log('Invalid token');
-      return res.status(400).json({ message: 'invalid token!' });
     }
 
-    // send to next endpoint
-    next();
+    return req;
   },
   signToken: function ({ username, email, _id }) {
     const payload = { username, email, _id };
